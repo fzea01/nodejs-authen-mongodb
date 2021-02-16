@@ -1,14 +1,11 @@
 const express = require('express')
 const Task = require('../models/task')
 const auth = require('../middleware/auth')
-const { Types } = require('mongoose')
 const router = new express.Router()
 
 
-// Task --------------------------------------------------------------------
 
 router.post('/tasks',auth, async (req,res) => {
-    // const task = new Task(req.body)
     const task = new Task({
         ...req.body,
         owner: req.user._id
@@ -24,7 +21,6 @@ router.post('/tasks',auth, async (req,res) => {
 
 router.get('/tasks', auth, async (req,res) => {
     try {
-        // const tasks = await Task.find({ owner: req.user._id })
         await req.user.populate('tasks').execPopulate()
         res.status(200).send(req.user.tasks)
     } catch (e) {
@@ -87,7 +83,6 @@ router.delete('/tasks/:id', auth, async (req, res) => {
     }
 
 })
-
 
 
 module.exports = router
